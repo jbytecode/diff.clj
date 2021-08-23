@@ -117,4 +117,16 @@
   (is
    (=
     0
-    (simplify '(log (exp 0))))))
+    (simplify '(log (exp 0)))))
+
+  (binding [*ns*          (find-ns 'diffclj.core)]
+    (is
+     (=
+      (Math/cos (* 2.0 Math/PI))
+      (eval (simplify '(cos (* 2.0 Math/PI)))))))
+
+  (binding [*ns*          (find-ns 'diffclj.core)]
+    (is
+     (=
+      (Math/sin (* 2.0 Math/PI))
+      (eval (simplify '(sin (* 2.0 Math/PI))))))))

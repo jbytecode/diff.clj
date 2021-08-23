@@ -1,6 +1,8 @@
 (ns diffclj.core
   (:gen-class))
 
+(declare deriv-cos)
+(declare deriv-sin)
 (declare deriv-exp)
 (declare deriv-plus)
 (declare deriv-minus)
@@ -12,6 +14,8 @@
 (declare deriv-list)
 (declare deriv)
 
+(declare simplify-cos)
+(declare simplify-sin)
 (declare simplify-log)
 (declare simplify-power)
 (declare simplify-exp)
@@ -29,6 +33,8 @@
 (defn log  [x] (Math/log x))
 (defn pow  [x y] (Math/pow x y))
 (defn exp  [x] (Math/exp x))
+(defn sin [x] (Math/sin x))
+(defn cos [x] (Math/cos x))
 
 
 (defn number-and-zero? [x]
@@ -124,6 +130,32 @@
     'exp
     (second expr))))
 
+
+;; Derivative of sin(a) where a is either
+;; a constant or a function
+(defn deriv-sin [expr]
+  (list
+   '*
+   (deriv (second expr))
+   (list
+    'cos
+    (second expr))))
+
+
+;; Derivative of cos(a) where a is either
+;; a constant or a function
+(defn deriv-cos [expr]
+  (list
+   '*
+   -1
+   (list
+    '*
+    (deriv (second expr))
+    (list
+     'sin
+     (second expr)))))
+
+
 ;; Derivation of (binaryop first-operand second operand) type 
 ;; expression like (* 'x 2) or (/ 'x (* x 2))
 (defn deriv-list [expr]
@@ -138,6 +170,8 @@
       (= op 'log)            (deriv-log  expr)
       (= op 'sqrt)           (deriv-sqrt expr)
       (= op 'exp)            (deriv-exp  expr)
+      (= op 'sin)            (deriv-sin expr)
+      (= op 'cos)            (deriv-cos expr)
       true                   (throw
                               (Exception.
                                (str "[ERROR] Function not defined: " op))))))
@@ -238,6 +272,22 @@
       true                          (list 'pow par1 par2))))
 
 
+(defn simplify-sin [expr]
+  (let
+   [par1     (simplify (second expr))]
+    (cond
+      (number? par1)                 (sin par1)
+      true                           (list 'sin par1))))
+
+
+(defn simplify-cos [expr]
+  (let
+   [par1     (simplify (second expr))]
+    (cond
+      (number? par1)                 (cos par1)
+      true                           (list 'cos par1))))
+
+
 (defn simplify-list [expr]
   (let
    [op    (first expr)]
@@ -249,6 +299,8 @@
       (= op 'exp)          (simplify-exp expr)
       (= op 'pow)          (simplify-power expr)
       (= op 'log)          (simplify-log expr)
+      (= op 'sin)          (simplify-sin expr)
+      (= op 'cos)          (simplify-cos expr)
       true                 (throw
                             (Exception.
                              (str "[ERROR] Function not defined: " op))))))
