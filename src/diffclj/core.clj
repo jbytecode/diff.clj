@@ -202,6 +202,7 @@
       (number-and-zero? par1)               par2
       (number-and-zero? par2)               par1
       (and (number? par1) (number? par2))   (+ par1 par2)
+      (= par1 par2)                         (list '* 2 par1)
       true                                  (list '+ par1 par2))))
 
 (defn simplify-minus [expr]
@@ -240,8 +241,6 @@
       (and (number? par1)
            (number? par2))              (double (/ par1 par2))
 
-      (and (number? par1)
-           (number? par2))              (/ par1 par2)
       true                              (list '/ par1 par2))))
 
 
