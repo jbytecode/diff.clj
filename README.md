@@ -1,6 +1,35 @@
 # diff.clj
 Derivative of single variable functions and expression simplifier
 
+# Installation
+
+## Leiningen/Boot
+
+```clojure
+[com.github.jbytecode/diffclj "0.1.0"]
+```
+
+## Clojure CLI/deps.edn
+
+```clojure
+com.github.jbytecode/diffclj {:mvn/version "0.1.0"}
+```
+
+## Gradle 
+
+```gradle
+implementation("com.github.jbytecode:diffclj:0.1.0")
+```
+
+## Maven
+
+```XML
+<dependency>
+  <groupId>com.github.jbytecode</groupId>
+  <artifactId>diffclj</artifactId>
+  <version>0.1.0</version>
+</dependency>
+```
 
 # Examples
 
