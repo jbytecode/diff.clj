@@ -36,6 +36,23 @@ implementation("com.github.jbytecode:diffclj:0.1.0")
 
 # Examples
 
+## Importing the library
+
+In your ```ns``` definition add
+
+```clojure
+(ns [your-namespace]
+  (require [diffclj.core :refer :all]))
+```
+
+to use the library or if you are using REPL, type 
+
+```clojure
+(require '[diffclj.core :refer :all])
+```
+
+and enter.
+
 ```clojure
 diffclj.core=> (deriv '(* x x))
 ;; (+ (* 1 x) (* 1 x))
