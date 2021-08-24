@@ -1,3 +1,6 @@
+[![Clojars Project](https://img.shields.io/clojars/v/com.github.jbytecode/diffclj.svg)](https://clojars.org/com.github.jbytecode/diffclj)
+
+
 # diff.clj
 Derivative of single variable functions and expression simplifier
 
