@@ -1,42 +1,46 @@
 (ns diffclj.core
   (:gen-class))
 
-(declare deriv-cosec)
-(declare deriv-sec)
-(declare deriv-cot)
-(declare deriv-tan)
-(declare deriv-cos)
-(declare deriv-sin)
-(declare deriv-exp)
-(declare deriv-plus)
-(declare deriv-minus)
-(declare deriv-product)
-(declare deriv-divide)
-(declare deriv-power)
-(declare deriv-log10)
-(declare deriv-log2)
-(declare deriv-log)
-(declare deriv-sqrt)
-(declare deriv-list)
-(declare deriv)
+;; declare derivative functions 
+;; on top of the file, because 
+;; the call order may differs
+;; than the order of definitions
+(declare deriv-cosec
+         deriv-sec
+         deriv-cot
+         deriv-tan
+         deriv-cos
+         deriv-sin
+         deriv-exp
+         deriv-plus
+         deriv-minus
+         deriv-product
+         deriv-divide
+         deriv-power
+         deriv-log10
+         deriv-log2
+         deriv-log
+         deriv-sqrt
+         deriv-list
+         deriv)
 
-(declare simplify-cosec)
-(declare simplify-sec)
-(declare simplify-cot)
-(declare simplify-tan)
-(declare simplify-cos)
-(declare simplify-sin)
-(declare simplify-log2)
-(declare simplify-log10)
-(declare simplify-log)
-(declare simplify-power)
-(declare simplify-exp)
-(declare simplify-divide)
-(declare simplify-product)
-(declare simplify-plus)
-(declare simplify-minus)
-(declare simplify-list)
-(declare simplify)
+(declare simplify-cosec
+         simplify-cot0
+         simplify-tan0
+         simplify-sec0
+         simplify-cos0
+         simplify-sin0
+         simplify-log2
+         simplify-log10
+         simplify-log
+         simplify-power
+         simplify-exp
+         simplify-divide
+         simplify-product
+         simplify-plus
+         simplify-minus
+         simplify-list
+         simplify)
 
 
 ;; Wrapper functions for 
@@ -55,11 +59,16 @@
 (defn cosec [x] (/ 1.0 (Math/sin x)))
 
 
+;; First test if x is number
+;; and then test if it is zero
 (defn number-and-zero? [x]
   (and
    (number? x)
    (zero? x)))
 
+
+;; First test if x is number
+;; and then test if it is one
 (defn number-and-one? [x]
   (and
    (number? x)
