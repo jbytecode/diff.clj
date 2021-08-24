@@ -1,6 +1,7 @@
 (ns diffclj.core
   (:gen-class))
 
+(declare deriv-cot)
 (declare deriv-tan)
 (declare deriv-cos)
 (declare deriv-sin)
@@ -15,6 +16,7 @@
 (declare deriv-list)
 (declare deriv)
 
+(declare simplify-cot)
 (declare simplify-tan)
 (declare simplify-cos)
 (declare simplify-sin)
@@ -38,7 +40,7 @@
 (defn sin [x] (Math/sin x))
 (defn cos [x] (Math/cos x))
 (defn tan [x] (Math/tan x))
-
+(defn cot [x] (/ 1.0 (Math/tan x)))
 
 (defn number-and-zero? [x]
   (and
@@ -161,7 +163,7 @@
 ;; Derivative of tan(a) where a is either
 ;; a costant of a function.
 ;; tanf(x) = sinf(x) / cosf(x)
-;; d(tanf(x))/dx = f'(x) / [cosf(x) * cosf(x)
+;; d(tanf(x))/dx = f'(x) / [cosf(x) * cosf(x)]
 (defn deriv-tan [expr]
   (list
    '/
@@ -174,6 +176,27 @@
     (list
      'cos
      (second expr)))))
+
+
+
+;; Derivative of cot(a) where a is either
+;; a costant of a function.
+;; cotf(x) = cosf(x) / sinf(x)
+;; d(cotf(x))/dx = -f'(x) / [sinf(x) * sinf(x)]
+(defn deriv-cot [expr]
+  (list
+   '/
+   (list
+    '* -1 (deriv (second expr)))
+   (list
+    '*
+    (list
+     'sin
+     (second expr))
+    (list
+     'sin
+     (second expr)))))
+
 
 
 ;; Derivation of (binaryop first-operand second operand) type 
@@ -193,6 +216,7 @@
       (= op 'sin)            (deriv-sin expr)
       (= op 'cos)            (deriv-cos expr)
       (= op 'tan)            (deriv-tan expr)
+      (= op 'cot)            (deriv-cot expr)
       true                   (throw
                               (Exception.
                                (str "[ERROR] Function not defined: " op))))))
@@ -244,6 +268,7 @@
       (number-and-zero? par1)               0
       (number-and-zero? par2)               0
       (and (number? par1) (number? par2))  (* par1 par2)
+      (= par1 par2)                        (list 'pow par1 2.0)
       true                                 (list '* par1 par2))))
 
 
@@ -314,6 +339,13 @@
       (number? par1)                 (tan par1)
       true                           (list 'tan par1))))
 
+(defn simplify-cot [expr]
+  (let
+   [par1     (simplify (second expr))]
+    (cond
+      (number? par1)                 (cot par1)
+      true                           (list 'tan par1))))
+
 (defn simplify-list [expr]
   (let
    [op    (first expr)]
@@ -328,6 +360,7 @@
       (= op 'sin)          (simplify-sin expr)
       (= op 'cos)          (simplify-cos expr)
       (= op 'tan)          (simplify-tan expr)
+      (= op 'cot)          (simplify-cot expr)
       true                 (throw
                             (Exception.
                              (str "[ERROR] Function not defined: " op))))))

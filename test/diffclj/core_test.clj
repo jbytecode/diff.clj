@@ -135,4 +135,10 @@
     (is
      (=
       (Math/tan (* 2.0 Math/PI))
-      (eval (simplify '(tan (* 2.0 Math/PI))))))))
+      (eval (simplify '(tan (* 2.0 Math/PI)))))))
+
+  (binding [*ns*          (find-ns 'diffclj.core)]
+    (is
+     (=
+      (simplify (deriv '(cot x)))
+      '(/ -1 (pow (sin x) 2.0))))))
