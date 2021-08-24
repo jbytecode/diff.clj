@@ -5,22 +5,22 @@
 ;; on top of the file, because 
 ;; the call order may differs
 ;; than the order of definitions
-(declare deriv-cosec
-         deriv-sec
-         deriv-cot
-         deriv-tan
-         deriv-cos
-         deriv-sin
-         deriv-exp
-         deriv-plus
-         deriv-minus
-         deriv-product
-         deriv-divide
-         deriv-power
-         deriv-log10
-         deriv-log2
-         deriv-log
-         deriv-sqrt
+(declare deriv-cosec         ;; cosecant
+         deriv-sec           ;; secant
+         deriv-cot           ;; cotangent
+         deriv-tan           ;; tangent
+         deriv-cos           ;; cosine
+         deriv-sin           ;; sine
+         deriv-exp           ;; exponential
+         deriv-plus          ;; +
+         deriv-minus         ;; -
+         deriv-product       ;; *
+         deriv-divide        ;; /
+         deriv-power         ;; ^
+         deriv-log10         ;; Logarithm with base 10
+         deriv-log2          ;; Logarithm with base 2
+         deriv-log           ;; Natural logarithm
+         deriv-sqrt          ;; Square root
          deriv-list
          deriv)
 
