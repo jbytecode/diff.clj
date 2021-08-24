@@ -13,6 +13,8 @@
 (declare deriv-product)
 (declare deriv-divide)
 (declare deriv-power)
+(declare deriv-log10)
+(declare deriv-log2)
 (declare deriv-log)
 (declare deriv-sqrt)
 (declare deriv-list)
@@ -24,6 +26,8 @@
 (declare simplify-tan)
 (declare simplify-cos)
 (declare simplify-sin)
+(declare simplify-log2)
+(declare simplify-log10)
 (declare simplify-log)
 (declare simplify-power)
 (declare simplify-exp)
@@ -39,6 +43,8 @@
 ;; sqrt, log, pow, etc
 (defn sqrt [x] (Math/sqrt x))
 (defn log  [x] (Math/log x))
+(defn log10 [x] (Math/log10 x))
+(defn log2 [x] (/ (Math/log x) (Math/log 2)))
 (defn pow  [x y] (Math/pow x y))
 (defn exp  [x] (Math/exp x))
 (defn sin [x] (Math/sin x))
@@ -126,6 +132,25 @@
    '/
    (deriv (second expr))
    (second expr)))
+
+
+(defn deriv-log10 [expr]
+  (list
+   '/
+   (deriv (second expr))
+   (list
+    '*
+    (second expr)
+    (log 10))))
+
+(defn deriv-log2 [expr]
+  (list
+   '/
+   (deriv (second expr))
+   (list
+    '*
+    (second expr)
+    (log 2))))
 
 ;; Derivate of sqrt(a) where a is either
 ;; a constant or a function
@@ -246,6 +271,8 @@
       (= op '/)              (deriv-divide expr)
       (= op 'pow)            (deriv-power expr)
       (= op 'log)            (deriv-log  expr)
+      (= op 'log10)          (deriv-log10 expr)
+      (= op 'log2)           (deriv-log2 expr)
       (= op 'sqrt)           (deriv-sqrt expr)
       (= op 'exp)            (deriv-exp  expr)
       (= op 'sin)            (deriv-sin expr)
@@ -345,6 +372,23 @@
            (= par1 1))                0
       true                            (list 'log par1))))
 
+(defn simplify-log10 [expr]
+  (let
+   [par1     (simplify (second expr))]
+    (cond
+      (and (number? par1)
+           (= par1 1))                0
+      true                            (list 'log10 par1))))
+
+
+(defn simplify-log2 [expr]
+  (let
+   [par1     (simplify (second expr))]
+    (cond
+      (and (number? par1)
+           (= par1 1))                0
+      true                            (list 'log2 par1))))
+
 
 (defn simplify-power [expr]
   (let
@@ -410,6 +454,8 @@
       (= op 'exp)          (simplify-exp expr)
       (= op 'pow)          (simplify-power expr)
       (= op 'log)          (simplify-log expr)
+      (= op 'log10)        (simplify-log10 expr)
+      (= op 'log2)         (simplify-log2 expr)
       (= op 'sin)          (simplify-sin expr)
       (= op 'cos)          (simplify-cos expr)
       (= op 'tan)          (simplify-tan expr)
