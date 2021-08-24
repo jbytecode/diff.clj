@@ -1,6 +1,7 @@
 (ns diffclj.core
   (:gen-class))
 
+(declare deriv-cosec)
 (declare deriv-sec)
 (declare deriv-cot)
 (declare deriv-tan)
@@ -17,7 +18,8 @@
 (declare deriv-list)
 (declare deriv)
 
-(declare deriv-sec)
+(declare simplify-cosec)
+(declare simplify-sec)
 (declare simplify-cot)
 (declare simplify-tan)
 (declare simplify-cos)
@@ -44,6 +46,8 @@
 (defn tan [x] (Math/tan x))
 (defn cot [x] (/ 1.0 (Math/tan x)))
 (defn sec [x] (/ 1.0 (Math/cos x)))
+(defn cosec [x] (/ 1.0 (Math/sin x)))
+
 
 (defn number-and-zero? [x]
   (and
@@ -216,6 +220,20 @@
      'cos
      (second expr)))))
 
+
+;; sec(x) = 1 / sin(x)
+(defn deriv-cosec [expr]
+  (deriv
+   (list
+    '/
+    1.0
+    (list
+     'sin
+     (second expr)))))
+
+
+
+
 ;; Derivation of (binaryop first-operand second operand) type 
 ;; expression like (* 'x 2) or (/ 'x (* x 2))
 (defn deriv-list [expr]
@@ -235,6 +253,7 @@
       (= op 'tan)            (deriv-tan expr)
       (= op 'cot)            (deriv-cot expr)
       (= op 'sec)            (deriv-sec expr)
+      (= op 'cosec)          (deriv-cosec expr)
       true                   (throw
                               (Exception.
                                (str "[ERROR] Function not defined: " op))))))
@@ -373,6 +392,13 @@
       (number? par1)                 (sec par1)
       true                           (list 'sec par1))))
 
+(defn simplify-cosec [expr]
+  (let
+   [par1     (simplify (second expr))]
+    (cond
+      (number? par1)                 (cosec par1)
+      true                           (list 'cosec par1))))
+
 (defn simplify-list [expr]
   (let
    [op    (first expr)]
@@ -389,6 +415,7 @@
       (= op 'tan)          (simplify-tan expr)
       (= op 'cot)          (simplify-cot expr)
       (= op 'sec)          (simplify-sec expr)
+      (= op 'cosec)        (simplify-cosec expr)
       true                 (throw
                             (Exception.
                              (str "[ERROR] Function not defined: " op))))))

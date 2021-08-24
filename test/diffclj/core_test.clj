@@ -147,4 +147,11 @@
     (is
      (=
       (simplify (deriv '(sec x)))
-      '(/ (- 0 (* -1 (sin x))) (pow (cos x) 2.0))))))
+      '(/ (- 0 (* -1 (sin x))) (pow (cos x) 2.0)))))
+
+
+  (binding [*ns*          (find-ns 'diffclj.core)]
+    (is
+     (=
+      (simplify (deriv '(cosec x)))
+      '(/ (- 0 (cos x)) (pow (sin x) 2.0))))))
