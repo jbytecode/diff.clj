@@ -25,11 +25,11 @@
          deriv)
 
 (declare simplify-cosec
-         simplify-cot0
-         simplify-tan0
-         simplify-sec0
-         simplify-cos0
-         simplify-sin0
+         simplify-cot
+         simplify-tan
+         simplify-sec
+         simplify-cos
+         simplify-sin
          simplify-log2
          simplify-log10
          simplify-log
