@@ -1,6 +1,7 @@
 (ns diffclj.core
   (:gen-class))
 
+(declare deriv-sec)
 (declare deriv-cot)
 (declare deriv-tan)
 (declare deriv-cos)
@@ -16,6 +17,7 @@
 (declare deriv-list)
 (declare deriv)
 
+(declare deriv-sec)
 (declare simplify-cot)
 (declare simplify-tan)
 (declare simplify-cos)
@@ -41,11 +43,18 @@
 (defn cos [x] (Math/cos x))
 (defn tan [x] (Math/tan x))
 (defn cot [x] (/ 1.0 (Math/tan x)))
+(defn sec [x] (/ 1.0 (Math/cos x)))
 
 (defn number-and-zero? [x]
   (and
    (number? x)
    (zero? x)))
+
+(defn number-and-one? [x]
+  (and
+   (number? x)
+   (= (double x) 1.0)))
+
 
 ;; Derivative of sum of two terms
 (defn deriv-plus [expr]
@@ -197,7 +206,15 @@
      'sin
      (second expr)))))
 
-
+;; sec(x) = 1 / cos(x)
+(defn deriv-sec [expr]
+  (deriv
+   (list
+    '/
+    1.0
+    (list
+     'cos
+     (second expr)))))
 
 ;; Derivation of (binaryop first-operand second operand) type 
 ;; expression like (* 'x 2) or (/ 'x (* x 2))
@@ -217,6 +234,7 @@
       (= op 'cos)            (deriv-cos expr)
       (= op 'tan)            (deriv-tan expr)
       (= op 'cot)            (deriv-cot expr)
+      (= op 'sec)            (deriv-sec expr)
       true                   (throw
                               (Exception.
                                (str "[ERROR] Function not defined: " op))))))
@@ -267,6 +285,8 @@
     (cond
       (number-and-zero? par1)               0
       (number-and-zero? par2)               0
+      (number-and-one?  par1)              par2
+      (number-and-one?  par2)              par1
       (and (number? par1) (number? par2))  (* par1 par2)
       (= par1 par2)                        (list 'pow par1 2.0)
       true                                 (list '* par1 par2))))
@@ -346,6 +366,13 @@
       (number? par1)                 (cot par1)
       true                           (list 'tan par1))))
 
+(defn simplify-sec [expr]
+  (let
+   [par1     (simplify (second expr))]
+    (cond
+      (number? par1)                 (sec par1)
+      true                           (list 'sec par1))))
+
 (defn simplify-list [expr]
   (let
    [op    (first expr)]
@@ -361,6 +388,7 @@
       (= op 'cos)          (simplify-cos expr)
       (= op 'tan)          (simplify-tan expr)
       (= op 'cot)          (simplify-cot expr)
+      (= op 'sec)          (simplify-sec expr)
       true                 (throw
                             (Exception.
                              (str "[ERROR] Function not defined: " op))))))
