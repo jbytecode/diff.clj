@@ -1,6 +1,7 @@
 (ns diffclj.core
   (:gen-class))
 
+(declare deriv-tan)
 (declare deriv-cos)
 (declare deriv-sin)
 (declare deriv-exp)
@@ -14,6 +15,7 @@
 (declare deriv-list)
 (declare deriv)
 
+(declare simplify-tan)
 (declare simplify-cos)
 (declare simplify-sin)
 (declare simplify-log)
@@ -35,6 +37,7 @@
 (defn exp  [x] (Math/exp x))
 (defn sin [x] (Math/sin x))
 (defn cos [x] (Math/cos x))
+(defn tan [x] (Math/tan x))
 
 
 (defn number-and-zero? [x]
@@ -155,6 +158,23 @@
      'sin
      (second expr)))))
 
+;; Derivative of tan(a) where a is either
+;; a costant of a function.
+;; tanf(x) = sinf(x) / cosf(x)
+;; d(tanf(x))/dx = f'(x) / [cosf(x) * cosf(x)
+(defn deriv-tan [expr]
+  (list
+   '/
+   (deriv (second expr))
+   (list
+    '*
+    (list
+     'cos
+     (second expr))
+    (list
+     'cos
+     (second expr)))))
+
 
 ;; Derivation of (binaryop first-operand second operand) type 
 ;; expression like (* 'x 2) or (/ 'x (* x 2))
@@ -172,6 +192,7 @@
       (= op 'exp)            (deriv-exp  expr)
       (= op 'sin)            (deriv-sin expr)
       (= op 'cos)            (deriv-cos expr)
+      (= op 'tan)            (deriv-tan expr)
       true                   (throw
                               (Exception.
                                (str "[ERROR] Function not defined: " op))))))
@@ -286,6 +307,12 @@
       (number? par1)                 (cos par1)
       true                           (list 'cos par1))))
 
+(defn simplify-tan [expr]
+  (let
+   [par1     (simplify (second expr))]
+    (cond
+      (number? par1)                 (tan par1)
+      true                           (list 'tan par1))))
 
 (defn simplify-list [expr]
   (let
@@ -300,6 +327,7 @@
       (= op 'log)          (simplify-log expr)
       (= op 'sin)          (simplify-sin expr)
       (= op 'cos)          (simplify-cos expr)
+      (= op 'tan)          (simplify-tan expr)
       true                 (throw
                             (Exception.
                              (str "[ERROR] Function not defined: " op))))))
