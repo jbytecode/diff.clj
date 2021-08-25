@@ -1,4 +1,4 @@
-(defproject com.github.jbytecode/diffclj "0.1.0"
+(defproject com.github.jbytecode/diffclj "0.1.1"
   :description "Derivative of single variable functions and expression simplifier"
   :url "https://github.com/jbytecode/diff.clj"
   :license {:name "MIT"
