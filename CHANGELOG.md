@@ -1,6 +1,8 @@
 ### v0.1.1:
     - Added sinh
     - Added cosh
+    - Added tanh
+    - Added coth
 
 -----------------
 

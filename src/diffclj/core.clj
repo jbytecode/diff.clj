@@ -6,6 +6,7 @@
 ;; the call order may differs
 ;; than the order of definitions
 (declare
+ deriv-coth          ;; hyperbolic cotangent
  deriv-tanh          ;; hyperbolic tangent
  deriv-cosh          ;; hyperbolic cosine
  deriv-sinh          ;; hyperbolic sine
@@ -29,6 +30,7 @@
  deriv)
 
 (declare
+ simplify-coth
  simplify-tanh
  simplify-cosh
  simplify-sinh
@@ -68,6 +70,8 @@
 (defn sinh [x] (Math/sinh x))
 (defn cosh [x] (Math/cosh x))
 (defn tanh [x] (Math/tanh x))
+(defn coth [x] (/ 1.0 (Math/tanh x)))
+
 
 ;; First test if x is number
 ;; and then test if it is zero
@@ -301,6 +305,8 @@
      (deriv (list '* -1 (second expr)))
      (list 'exp (list '* -1 (second expr)))))))
 
+
+
 (defn deriv-tanh [expr]
   (deriv
    (list
@@ -310,6 +316,19 @@
      (second expr))
     (list
      'cosh
+     (second expr)))))
+
+
+
+(defn deriv-coth [expr]
+  (deriv
+   (list
+    '/
+    (list
+     'cosh
+     (second expr))
+    (list
+     'sinh
      (second expr)))))
 
 ;; Derivation of (binaryop first-operand second operand) type 
@@ -337,6 +356,7 @@
       (= op 'sinh)           (deriv-sinh expr)
       (= op 'cosh)           (deriv-cosh expr)
       (= op 'tanh)           (deriv-tanh expr)
+      (= op 'coth)           (deriv-coth expr)
       true                   (throw
                               (Exception.
                                (str "[ERROR] Function not defined: " op))))))
@@ -520,6 +540,13 @@
       (number? par1)                 (tanh par1)
       true                           (list 'tanh par1))))
 
+(defn simplify-coth [expr]
+  (let
+   [par1     (simplify (second expr))]
+    (cond
+      (number? par1)                 (coth par1)
+      true                           (list 'coth par1))))
+
 (defn simplify-list [expr]
   (let
    [op    (first expr)]
@@ -542,6 +569,7 @@
       (= op 'sinh)         (simplify-sinh expr)
       (= op 'cosh)         (simplify-cosh expr)
       (= op 'tanh)         (simplify-tanh expr)
+      (= op 'coth)         (simplify-coth expr)
       true                 (throw
                             (Exception.
                              (str "[ERROR] Function not defined: " op))))))
