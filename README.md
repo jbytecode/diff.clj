@@ -9,19 +9,19 @@ Derivative of single variable functions and expression simplifier
 ## Leiningen/Boot
 
 ```clojure
-[com.github.jbytecode/diffclj "0.1.0"]
+[com.github.jbytecode/diffclj "0.1.1"]
 ```
 
 ## Clojure CLI/deps.edn
 
 ```clojure
-com.github.jbytecode/diffclj {:mvn/version "0.1.0"}
+com.github.jbytecode/diffclj {:mvn/version "0.1.1"}
 ```
 
 ## Gradle 
 
 ```gradle
-implementation("com.github.jbytecode:diffclj:0.1.0")
+implementation("com.github.jbytecode:diffclj:0.1.1")
 ```
 
 ## Maven
@@ -30,7 +30,7 @@ implementation("com.github.jbytecode:diffclj:0.1.0")
 <dependency>
   <groupId>com.github.jbytecode</groupId>
   <artifactId>diffclj</artifactId>
-  <version>0.1.0</version>
+  <version>0.1.1</version>
 </dependency>
 ```
 
@@ -123,24 +123,31 @@ diffclj.core=> (simplify (deriv '(pow x x)))
 ## Defined functions
 
 ```clojure
-(declare deriv-cosec         ;; cosecant
-         deriv-sec           ;; secant
-         deriv-cot           ;; cotangent
-         deriv-tan           ;; tangent
-         deriv-cos           ;; cosine
-         deriv-sin           ;; sine
-         deriv-exp           ;; exponential
-         deriv-plus          ;; +
-         deriv-minus         ;; -
-         deriv-product       ;; *
-         deriv-divide        ;; /
-         deriv-power         ;; ^
-         deriv-log10         ;; Logarithm with base 10
-         deriv-log2          ;; Logarithm with base 2
-         deriv-log           ;; Natural logarithm
-         deriv-sqrt          ;; Square root
-         deriv-list        
-         deriv)
+(declare
+ deriv-csch          ;; hyperbolic cosecant
+ deriv-sech          ;; hyperbolic secant
+ deriv-coth          ;; hyperbolic cotangent
+ deriv-tanh          ;; hyperbolic tangent
+ deriv-cosh          ;; hyperbolic cosine
+ deriv-sinh          ;; hyperbolic sine
+ deriv-cosec         ;; cosecant
+ deriv-sec           ;; secant
+ deriv-cot           ;; cotangent
+ deriv-tan           ;; tangent
+ deriv-cos           ;; cosine
+ deriv-sin           ;; sine
+ deriv-exp           ;; exponential
+ deriv-plus          ;; +
+ deriv-minus         ;; -
+ deriv-product       ;; *
+ deriv-divide        ;; /
+ deriv-power         ;; ^
+ deriv-log10         ;; Logarithm with base 10
+ deriv-log2          ;; Logarithm with base 2
+ deriv-log           ;; Natural logarithm
+ deriv-sqrt          ;; Square root
+ deriv-list
+ deriv)
 ```
 
 
