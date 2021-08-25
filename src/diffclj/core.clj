@@ -6,6 +6,7 @@
 ;; the call order may differs
 ;; than the order of definitions
 (declare
+ deriv-acos          ;; Inverse cosine
  deriv-asin          ;; Inverse sine 
  deriv-csch          ;; hyperbolic cosecant
  deriv-sech          ;; hyperbolic secant
@@ -33,6 +34,7 @@
  deriv)
 
 (declare
+ simplify-acos
  simplify-asin
  simplify-csch
  simplify-sech
@@ -80,6 +82,9 @@
 (defn sech [x] (/ 1.0 (Math/cosh x)))
 (defn csch [x] (/ 1.0 (Math/sinh x)))
 (defn asin [x] (Math/asin x))
+(defn acos [x] (Math/acos x))
+
+
 
 ;; First test if x is number
 ;; and then test if it is zero
@@ -373,6 +378,18 @@
           (list 'pow (second expr) 2)))))
 
 
+(defn deriv-acos [expr]
+  (list
+   '/
+   (list
+    '* -1 (deriv (second expr)))
+   (list
+    'sqrt
+    (list '- 1
+          (list 'pow (second expr) 2)))))
+
+
+
 ;; Derivation of (binaryop first-operand second operand) type 
 ;; expression like (* 'x 2) or (/ 'x (* x 2))
 (defn deriv-list [expr]
@@ -402,6 +419,7 @@
       (= op 'sech)           (deriv-sech expr)
       (= op 'csch)           (deriv-csch expr)
       (= op 'asin)           (deriv-asin expr)
+      (= op 'acos)           (deriv-acos expr)
       true                   (throw
                               (Exception.
                                (str "[ERROR] Function not defined: " op))))))
@@ -626,6 +644,13 @@
       true                           (list 'asin par1))))
 
 
+(defn simplify-acos [expr]
+  (let
+   [par1     (simplify (second expr))]
+    (cond
+      (number? par1)                 (acos par1)
+      true                           (list 'acos par1))))
+
 
 (defn simplify-list [expr]
   (let
@@ -654,6 +679,7 @@
       (= op 'sech)         (simplify-sech expr)
       (= op 'csch)         (simplify-csch expr)
       (= op 'asin)         (simplify-asin expr)
+      (= op 'acos)         (simplify-acos expr)
       true                 (throw
                             (Exception.
                              (str "[ERROR] Function not defined: " op))))))

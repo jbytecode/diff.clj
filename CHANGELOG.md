@@ -1,6 +1,6 @@
 ### v0.1.2
     - Added asin 
-
+    - Added acos
 
 ------------------
 
