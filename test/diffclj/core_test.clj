@@ -155,3 +155,14 @@
      (=
       (simplify (deriv '(cosec x)))
       '(/ (- 0 (cos x)) (pow (sin x) 2.0))))))
+
+
+
+(deftest test-hyperbolic-trigonmetrics
+  (testing "Testing hyperbolic triginometric functions"
+
+    (binding [*ns*          (find-ns 'diffclj.core)]
+      (is
+       (=
+        (simplify (deriv '(sinh x)))
+        '(* 0.5 (- (exp x) (* -1 (exp (* -1 x))))))))))

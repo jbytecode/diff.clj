@@ -5,26 +5,29 @@
 ;; on top of the file, because 
 ;; the call order may differs
 ;; than the order of definitions
-(declare deriv-cosec         ;; cosecant
-         deriv-sec           ;; secant
-         deriv-cot           ;; cotangent
-         deriv-tan           ;; tangent
-         deriv-cos           ;; cosine
-         deriv-sin           ;; sine
-         deriv-exp           ;; exponential
-         deriv-plus          ;; +
-         deriv-minus         ;; -
-         deriv-product       ;; *
-         deriv-divide        ;; /
-         deriv-power         ;; ^
-         deriv-log10         ;; Logarithm with base 10
-         deriv-log2          ;; Logarithm with base 2
-         deriv-log           ;; Natural logarithm
-         deriv-sqrt          ;; Square root
-         deriv-list
-         deriv)
+(declare
+ deriv-sinh          ;; hyperbolic sine
+ deriv-cosec         ;; cosecant
+ deriv-sec           ;; secant
+ deriv-cot           ;; cotangent
+ deriv-tan           ;; tangent
+ deriv-cos           ;; cosine
+ deriv-sin           ;; sine
+ deriv-exp           ;; exponential
+ deriv-plus          ;; +
+ deriv-minus         ;; -
+ deriv-product       ;; *
+ deriv-divide        ;; /
+ deriv-power         ;; ^
+ deriv-log10         ;; Logarithm with base 10
+ deriv-log2          ;; Logarithm with base 2
+ deriv-log           ;; Natural logarithm
+ deriv-sqrt          ;; Square root
+ deriv-list
+ deriv)
 
-(declare simplify-cosec
+(declare simplify-sinh
+         simplify-cosec
          simplify-cot
          simplify-tan
          simplify-sec
@@ -57,7 +60,7 @@
 (defn cot [x] (/ 1.0 (Math/tan x)))
 (defn sec [x] (/ 1.0 (Math/cos x)))
 (defn cosec [x] (/ 1.0 (Math/sin x)))
-
+(defn sinh [x] (Math/sinh x))
 
 ;; First test if x is number
 ;; and then test if it is zero
@@ -266,6 +269,19 @@
      (second expr)))))
 
 
+(defn deriv-sinh [expr]
+  (list
+   '*
+   (list '/ 1 2)
+   (list
+    '-
+    (list '* (deriv (second expr)) (list 'exp (second expr)))
+    (list
+     '*
+     (deriv (list '* -1 (second expr)))
+     (list 'exp (list '* -1 (second expr)))))))
+
+
 
 
 ;; Derivation of (binaryop first-operand second operand) type 
@@ -290,6 +306,7 @@
       (= op 'cot)            (deriv-cot expr)
       (= op 'sec)            (deriv-sec expr)
       (= op 'cosec)          (deriv-cosec expr)
+      (= op 'sinh)           (deriv-sinh expr)
       true                   (throw
                               (Exception.
                                (str "[ERROR] Function not defined: " op))))))
