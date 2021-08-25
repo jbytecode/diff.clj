@@ -6,6 +6,7 @@
 ;; the call order may differs
 ;; than the order of definitions
 (declare
+ deriv-asin          ;; Inverse sine 
  deriv-csch          ;; hyperbolic cosecant
  deriv-sech          ;; hyperbolic secant
  deriv-coth          ;; hyperbolic cotangent
@@ -32,6 +33,7 @@
  deriv)
 
 (declare
+ simplify-asin
  simplify-csch
  simplify-sech
  simplify-coth
@@ -77,6 +79,7 @@
 (defn coth [x] (/ 1.0 (Math/tanh x)))
 (defn sech [x] (/ 1.0 (Math/cosh x)))
 (defn csch [x] (/ 1.0 (Math/sinh x)))
+(defn asin [x] (Math/asin x))
 
 ;; First test if x is number
 ;; and then test if it is zero
@@ -360,6 +363,16 @@
 
 
 
+(defn deriv-asin [expr]
+  (list
+   '/
+   (deriv (second expr))
+   (list
+    'sqrt
+    (list '- 1
+          (list 'pow (second expr) 2)))))
+
+
 ;; Derivation of (binaryop first-operand second operand) type 
 ;; expression like (* 'x 2) or (/ 'x (* x 2))
 (defn deriv-list [expr]
@@ -388,6 +401,7 @@
       (= op 'coth)           (deriv-coth expr)
       (= op 'sech)           (deriv-sech expr)
       (= op 'csch)           (deriv-csch expr)
+      (= op 'asin)           (deriv-asin expr)
       true                   (throw
                               (Exception.
                                (str "[ERROR] Function not defined: " op))))))
@@ -497,6 +511,15 @@
       true                            (list 'log2 par1))))
 
 
+
+(defn simplify-sqrt [expr]
+  (let
+   [par1     (simplify (second expr))]
+    (cond
+      (number? par1)                 (sqrt par1)
+      true                           (list 'sqrt par1))))
+
+
 (defn simplify-power [expr]
   (let
    [par1     (simplify (second expr))
@@ -594,6 +617,16 @@
       (number? par1)                 (csch par1)
       true                           (list 'csch par1))))
 
+
+(defn simplify-asin [expr]
+  (let
+   [par1     (simplify (second expr))]
+    (cond
+      (number? par1)                 (asin par1)
+      true                           (list 'asin par1))))
+
+
+
 (defn simplify-list [expr]
   (let
    [op    (first expr)]
@@ -604,6 +637,7 @@
       (= op '/)            (simplify-divide expr)
       (= op 'exp)          (simplify-exp expr)
       (= op 'pow)          (simplify-power expr)
+      (= op 'sqrt)         (simplify-sqrt expr)
       (= op 'log)          (simplify-log expr)
       (= op 'log10)        (simplify-log10 expr)
       (= op 'log2)         (simplify-log2 expr)
@@ -619,6 +653,7 @@
       (= op 'coth)         (simplify-coth expr)
       (= op 'sech)         (simplify-sech expr)
       (= op 'csch)         (simplify-csch expr)
+      (= op 'asin)         (simplify-asin expr)
       true                 (throw
                             (Exception.
                              (str "[ERROR] Function not defined: " op))))))

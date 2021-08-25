@@ -158,6 +158,10 @@
 
 
 
+
+
+
+
 (deftest test-hyperbolic-trigonmetrics
   (testing "Testing hyperbolic triginometric functions"
 
@@ -197,3 +201,18 @@
        (=
         (simplify (deriv '(csch x)))
         '(/ (- 0 (* 0.5 (- (exp x) (* -1 (exp (* -1 x)))))) (pow (sinh x) 2.0)))))))
+
+
+
+
+
+(deftest test-inverse-trigonometric
+  (testing "Inverse trigonometric functions"
+
+
+    (binding [*ns*          (find-ns 'diffclj.core)]
+      (is
+       (=
+        (simplify (deriv '(asin x)))
+        '(/ 1 (sqrt (- 1 (pow x 2)))))))))
+

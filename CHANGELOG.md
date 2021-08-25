@@ -1,3 +1,9 @@
+### v0.1.2
+    - Added asin 
+
+
+------------------
+
 ### v0.1.1:
     - Added sinh (Hyperbolic sine)
     - Added cosh (Hyperbolic cosine)
