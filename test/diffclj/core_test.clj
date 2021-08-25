@@ -165,4 +165,10 @@
       (is
        (=
         (simplify (deriv '(sinh x)))
-        '(* 0.5 (- (exp x) (* -1 (exp (* -1 x))))))))))
+        '(* 0.5 (- (exp x) (* -1 (exp (* -1 x))))))))
+
+    (binding [*ns*          (find-ns 'diffclj.core)]
+      (is
+       (=
+        (simplify (deriv '(cosh x)))
+        '(* 0.5 (+ (exp x) (* -1 (exp (* -1 x))))))))))

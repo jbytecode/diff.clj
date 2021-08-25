@@ -6,6 +6,7 @@
 ;; the call order may differs
 ;; than the order of definitions
 (declare
+ deriv-cosh          ;; hyperbolic cosine
  deriv-sinh          ;; hyperbolic sine
  deriv-cosec         ;; cosecant
  deriv-sec           ;; secant
@@ -26,24 +27,26 @@
  deriv-list
  deriv)
 
-(declare simplify-sinh
-         simplify-cosec
-         simplify-cot
-         simplify-tan
-         simplify-sec
-         simplify-cos
-         simplify-sin
-         simplify-log2
-         simplify-log10
-         simplify-log
-         simplify-power
-         simplify-exp
-         simplify-divide
-         simplify-product
-         simplify-plus
-         simplify-minus
-         simplify-list
-         simplify)
+(declare
+ simplify-cosh
+ simplify-sinh
+ simplify-cosec
+ simplify-cot
+ simplify-tan
+ simplify-sec
+ simplify-cos
+ simplify-sin
+ simplify-log2
+ simplify-log10
+ simplify-log
+ simplify-power
+ simplify-exp
+ simplify-divide
+ simplify-product
+ simplify-plus
+ simplify-minus
+ simplify-list
+ simplify)
 
 
 ;; Wrapper functions for 
@@ -61,6 +64,7 @@
 (defn sec [x] (/ 1.0 (Math/cos x)))
 (defn cosec [x] (/ 1.0 (Math/sin x)))
 (defn sinh [x] (Math/sinh x))
+(defn cosh [x] (Math/cosh x))
 
 ;; First test if x is number
 ;; and then test if it is zero
@@ -282,6 +286,18 @@
      (list 'exp (list '* -1 (second expr)))))))
 
 
+(defn deriv-cosh [expr]
+  (list
+   '*
+   (list '/ 1 2)
+   (list
+    '+
+    (list '* (deriv (second expr)) (list 'exp (second expr)))
+    (list
+     '*
+     (deriv (list '* -1 (second expr)))
+     (list 'exp (list '* -1 (second expr)))))))
+
 
 
 ;; Derivation of (binaryop first-operand second operand) type 
@@ -307,6 +323,7 @@
       (= op 'sec)            (deriv-sec expr)
       (= op 'cosec)          (deriv-cosec expr)
       (= op 'sinh)           (deriv-sinh expr)
+      (= op 'cosh)           (deriv-cosh expr)
       true                   (throw
                               (Exception.
                                (str "[ERROR] Function not defined: " op))))))
@@ -469,6 +486,20 @@
       (number? par1)                 (cosec par1)
       true                           (list 'cosec par1))))
 
+(defn simplify-sinh [expr]
+  (let
+   [par1     (simplify (second expr))]
+    (cond
+      (number? par1)                 (sinh par1)
+      true                           (list 'sinh par1))))
+
+(defn simplify-cosh [expr]
+  (let
+   [par1     (simplify (second expr))]
+    (cond
+      (number? par1)                 (cosh par1)
+      true                           (list 'cosh par1))))
+
 (defn simplify-list [expr]
   (let
    [op    (first expr)]
@@ -488,6 +519,8 @@
       (= op 'cot)          (simplify-cot expr)
       (= op 'sec)          (simplify-sec expr)
       (= op 'cosec)        (simplify-cosec expr)
+      (= op 'sinh)         (simplify-sinh expr)
+      (= op 'cosh)         (simplify-cosh expr)
       true                 (throw
                             (Exception.
                              (str "[ERROR] Function not defined: " op))))))
