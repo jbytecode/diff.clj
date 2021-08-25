@@ -1,8 +1,10 @@
 ### v0.1.1:
-    - Added sinh
-    - Added cosh
-    - Added tanh
-    - Added coth
+    - Added sinh (Hyperbolic sine)
+    - Added cosh (Hyperbolic cosine)
+    - Added tanh (Hyperbolic tangent)
+    - Added coth (Hyperbolic cotangent)
+    - Added sech (Hyperbolic secant)
+    - Added csch (Hyperbolic cosecant)
 
 -----------------
 
