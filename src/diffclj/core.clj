@@ -6,6 +6,7 @@
 ;; the call order may differs
 ;; than the order of definitions
 (declare
+ deriv-tanh          ;; hyperbolic tangent
  deriv-cosh          ;; hyperbolic cosine
  deriv-sinh          ;; hyperbolic sine
  deriv-cosec         ;; cosecant
@@ -28,6 +29,7 @@
  deriv)
 
 (declare
+ simplify-tanh
  simplify-cosh
  simplify-sinh
  simplify-cosec
@@ -65,6 +67,7 @@
 (defn cosec [x] (/ 1.0 (Math/sin x)))
 (defn sinh [x] (Math/sinh x))
 (defn cosh [x] (Math/cosh x))
+(defn tanh [x] (Math/tanh x))
 
 ;; First test if x is number
 ;; and then test if it is zero
@@ -298,7 +301,16 @@
      (deriv (list '* -1 (second expr)))
      (list 'exp (list '* -1 (second expr)))))))
 
-
+(defn deriv-tanh [expr]
+  (deriv
+   (list
+    '/
+    (list
+     'sinh
+     (second expr))
+    (list
+     'cosh
+     (second expr)))))
 
 ;; Derivation of (binaryop first-operand second operand) type 
 ;; expression like (* 'x 2) or (/ 'x (* x 2))
@@ -324,6 +336,7 @@
       (= op 'cosec)          (deriv-cosec expr)
       (= op 'sinh)           (deriv-sinh expr)
       (= op 'cosh)           (deriv-cosh expr)
+      (= op 'tanh)           (deriv-tanh expr)
       true                   (throw
                               (Exception.
                                (str "[ERROR] Function not defined: " op))))))
@@ -500,6 +513,13 @@
       (number? par1)                 (cosh par1)
       true                           (list 'cosh par1))))
 
+(defn simplify-tanh [expr]
+  (let
+   [par1     (simplify (second expr))]
+    (cond
+      (number? par1)                 (tanh par1)
+      true                           (list 'tanh par1))))
+
 (defn simplify-list [expr]
   (let
    [op    (first expr)]
@@ -521,6 +541,7 @@
       (= op 'cosec)        (simplify-cosec expr)
       (= op 'sinh)         (simplify-sinh expr)
       (= op 'cosh)         (simplify-cosh expr)
+      (= op 'tanh)         (simplify-tanh expr)
       true                 (throw
                             (Exception.
                              (str "[ERROR] Function not defined: " op))))))
