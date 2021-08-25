@@ -221,5 +221,12 @@
       (is
        (=
         (simplify (deriv '(acos x)))
-        '(/ -1 (sqrt (- 1 (pow x 2)))))))))
+        '(/ -1 (sqrt (- 1 (pow x 2)))))))
+
+
+    (binding [*ns*          (find-ns 'diffclj.core)]
+      (is
+       (=
+        (simplify (deriv '(atan x)))
+        '(/ 1 (+ 1 (pow x 2))))))))
 
