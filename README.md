@@ -9,19 +9,19 @@ Derivative of single variable functions and expression simplifier
 ## Leiningen/Boot
 
 ```clojure
-[com.github.jbytecode/diffclj "0.1.1"]
+[com.github.jbytecode/diffclj "0.1.2"]
 ```
 
 ## Clojure CLI/deps.edn
 
 ```clojure
-com.github.jbytecode/diffclj {:mvn/version "0.1.1"}
+com.github.jbytecode/diffclj {:mvn/version "0.1.2"}
 ```
 
 ## Gradle 
 
 ```gradle
-implementation("com.github.jbytecode:diffclj:0.1.1")
+implementation("com.github.jbytecode:diffclj:0.1.2")
 ```
 
 ## Maven
@@ -30,7 +30,7 @@ implementation("com.github.jbytecode:diffclj:0.1.1")
 <dependency>
   <groupId>com.github.jbytecode</groupId>
   <artifactId>diffclj</artifactId>
-  <version>0.1.1</version>
+  <version>0.1.2</version>
 </dependency>
 ```
 
@@ -124,6 +124,10 @@ diffclj.core=> (simplify (deriv '(pow x x)))
 
 ```clojure
 (declare
+ deriv-acot          ;; Inverse cotangent
+ deriv-atan          ;; Inverse tangent
+ deriv-acos          ;; Inverse cosine
+ deriv-asin          ;; Inverse sine 
  deriv-csch          ;; hyperbolic cosecant
  deriv-sech          ;; hyperbolic secant
  deriv-coth          ;; hyperbolic cotangent

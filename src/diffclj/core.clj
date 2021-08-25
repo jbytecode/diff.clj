@@ -6,6 +6,7 @@
 ;; the call order may differs
 ;; than the order of definitions
 (declare
+ deriv-acot          ;; Inverse cotangent
  deriv-atan          ;; Inverse tangent
  deriv-acos          ;; Inverse cosine
  deriv-asin          ;; Inverse sine 
@@ -35,6 +36,7 @@
  deriv)
 
 (declare
+ simplify-acot
  simplify-atan
  simplify-acos
  simplify-asin
@@ -86,7 +88,7 @@
 (defn asin [x] (Math/asin x))
 (defn acos [x] (Math/acos x))
 (defn atan [x] (Math/atan x))
-
+(defn acot [x] (/ 1.0 (Math/atan x)))
 
 ;; First test if x is number
 ;; and then test if it is zero
@@ -402,6 +404,20 @@
      'pow (second expr) 2))))
 
 
+(defn deriv-acot [expr]
+  (list
+   '/
+   (list
+    '*
+    -1
+    (deriv (second expr)))
+   (list
+    '+
+    1
+    (list
+     'pow (second expr) 2))))
+
+
 
 ;; Derivation of (binaryop first-operand second operand) type 
 ;; expression like (* 'x 2) or (/ 'x (* x 2))
@@ -434,6 +450,7 @@
       (= op 'asin)           (deriv-asin expr)
       (= op 'acos)           (deriv-acos expr)
       (= op 'atan)           (deriv-atan expr)
+      (= op 'acot)           (deriv-acot expr)
       true                   (throw
                               (Exception.
                                (str "[ERROR] Function not defined: " op))))))
@@ -674,6 +691,13 @@
       true                           (list 'atan par1))))
 
 
+(defn simplify-acot [expr]
+  (let
+   [par1     (simplify (second expr))]
+    (cond
+      (number? par1)                 (acot par1)
+      true                           (list 'acot par1))))
+
 
 
 (defn simplify-list [expr]
@@ -705,6 +729,7 @@
       (= op 'asin)         (simplify-asin expr)
       (= op 'acos)         (simplify-acos expr)
       (= op 'atan)         (simplify-atan expr)
+      (= op 'acot)         (simplify-acot expr)
       true                 (throw
                             (Exception.
                              (str "[ERROR] Function not defined: " op))))))

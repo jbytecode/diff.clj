@@ -1,7 +1,8 @@
 ### v0.1.2
-    - Added asin 
-    - Added acos
-    - Added atan
+    - Added asin (Inverse sine) 
+    - Added acos (Inverse cosine)
+    - Added atan (Inverse tangent)
+    - Added acot (Inverse cotangent)
 
 ------------------
 
