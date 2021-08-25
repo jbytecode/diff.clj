@@ -6,6 +6,7 @@
 ;; the call order may differs
 ;; than the order of definitions
 (declare
+ deriv-sech          ;; hyperbolic secant
  deriv-coth          ;; hyperbolic cotangent
  deriv-tanh          ;; hyperbolic tangent
  deriv-cosh          ;; hyperbolic cosine
@@ -30,6 +31,7 @@
  deriv)
 
 (declare
+ simplify-sech
  simplify-coth
  simplify-tanh
  simplify-cosh
@@ -71,6 +73,7 @@
 (defn cosh [x] (Math/cosh x))
 (defn tanh [x] (Math/tanh x))
 (defn coth [x] (/ 1.0 (Math/tanh x)))
+(defn sech [x] (/ 1.0 (Math/cosh x)))
 
 
 ;; First test if x is number
@@ -331,6 +334,18 @@
      'sinh
      (second expr)))))
 
+
+
+(defn deriv-sech [expr]
+  (deriv
+   (list
+    '/
+    1
+    (list
+     'cosh
+     (second expr)))))
+
+
 ;; Derivation of (binaryop first-operand second operand) type 
 ;; expression like (* 'x 2) or (/ 'x (* x 2))
 (defn deriv-list [expr]
@@ -357,6 +372,7 @@
       (= op 'cosh)           (deriv-cosh expr)
       (= op 'tanh)           (deriv-tanh expr)
       (= op 'coth)           (deriv-coth expr)
+      (= op 'sech)           (deriv-sech expr)
       true                   (throw
                               (Exception.
                                (str "[ERROR] Function not defined: " op))))))
@@ -547,6 +563,14 @@
       (number? par1)                 (coth par1)
       true                           (list 'coth par1))))
 
+
+(defn simplify-sech [expr]
+  (let
+   [par1     (simplify (second expr))]
+    (cond
+      (number? par1)                 (sech par1)
+      true                           (list 'sech par1))))
+
 (defn simplify-list [expr]
   (let
    [op    (first expr)]
@@ -570,6 +594,7 @@
       (= op 'cosh)         (simplify-cosh expr)
       (= op 'tanh)         (simplify-tanh expr)
       (= op 'coth)         (simplify-coth expr)
+      (= op 'sech)         (simplify-sech expr)
       true                 (throw
                             (Exception.
                              (str "[ERROR] Function not defined: " op))))))
