@@ -57,6 +57,7 @@
  simplify-log
  simplify-power
  simplify-exp
+ simplify-division-of-products
  simplify-divide
  simplify-product
  simplify-plus
@@ -522,6 +523,24 @@
       true                                 (list '* par1 par2))))
 
 
+
+(defn simplify-division-of-products [expr]
+  (let
+   [nom                                (simplify (second expr))
+    denom                              (simplify (last expr))
+    nom-part1                          (if (list? nom) (simplify (second nom)) nom)
+    nom-part2                          (if (list? nom) (simplify (last nom)) nom)
+    denom-part1                        (if (list? denom) (simplify (second denom)) denom)
+    denom-part2                        (if (list? denom) (simplify (last denom)) denom)]
+    (cond
+      (= nom-part1 denom-part1)         (simplify (list '/ nom-part2 denom-part2))  ;; AB/AC = B/C
+      (= nom-part1 denom-part2)         (simplify (list '/ nom-part2 denom-part1))  ;; AB/CA = B/C
+      (= nom-part2 denom-part1)         (simplify (list '/ nom-part1 denom-part2))  ;; AB/BC = A/C
+      (= nom-part2 denom-part2)         (simplify (list '/ nom-part1 denom-part1))  ;; AB/CB = A/C
+      true                              (list '/ nom denom))))           ;; AB/CD = AB/CD
+
+
+
 (defn simplify-divide [expr]
   (let
    [par1     (simplify (second expr))
@@ -536,6 +555,8 @@
 
       (and (number? par1)
            (number? par2))              (double (/ par1 par2))
+
+      (division-of-products? expr)      (simplify-division-of-products expr)
 
       true                              (list '/ par1 par2))))
 
@@ -620,7 +641,7 @@
    [par1     (simplify (second expr))]
     (cond
       (number? par1)                 (cot par1)
-      true                           (list 'tan par1))))
+      true                           (list 'cot par1))))
 
 (defn simplify-sec [expr]
   (let
