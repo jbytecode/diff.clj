@@ -9,19 +9,19 @@ Derivative of single variable functions and expression simplifier
 ## Leiningen/Boot
 
 ```clojure
-[com.github.jbytecode/diffclj "0.1.2"]
+[com.github.jbytecode/diffclj "0.1.3"]
 ```
 
 ## Clojure CLI/deps.edn
 
 ```clojure
-com.github.jbytecode/diffclj {:mvn/version "0.1.2"}
+com.github.jbytecode/diffclj {:mvn/version "0.1.3"}
 ```
 
 ## Gradle 
 
 ```gradle
-implementation("com.github.jbytecode:diffclj:0.1.2")
+implementation("com.github.jbytecode:diffclj:0.1.3")
 ```
 
 ## Maven
@@ -30,7 +30,7 @@ implementation("com.github.jbytecode:diffclj:0.1.2")
 <dependency>
   <groupId>com.github.jbytecode</groupId>
   <artifactId>diffclj</artifactId>
-  <version>0.1.2</version>
+  <version>0.1.3</version>
 </dependency>
 ```
 

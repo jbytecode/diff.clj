@@ -1,3 +1,6 @@
+### v0.1.3
+    - Added AB/BC = AC type of simplification
+
 ### v0.1.2
     - Added asin (Inverse sine) 
     - Added acos (Inverse cosine)
