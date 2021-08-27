@@ -106,6 +106,20 @@
    (= (double x) 1.0)))
 
 
+(defn product? [expr]
+  (and
+   (list? expr)
+   (= (count expr) 3)
+   (= (first expr) '*)))
+
+(defn division-of-products? [expr]
+  (and
+   (list? expr)
+   (= (count expr) 3)
+   (= (first expr) '/)
+   (product? (second expr))
+   (product? (last expr))))
+
 ;; Derivative of sum of two terms
 (defn deriv-plus [expr]
   (list

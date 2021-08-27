@@ -6,6 +6,39 @@
 (def ^:dynamic sqrt diff/sqrt)
 
 
+(deftest is-product
+  (testing "is that a product?"
+    (is
+     (diff/product? '(* 5 2)))
+
+    (is
+     (diff/product? '(* 60 70)))
+
+    (is
+     (not (diff/product? '(/ 60 70))))
+
+    (is
+     (not (diff/product? 50)))))
+
+
+
+(deftest is-division-of-products
+  (testing "is that a division of two products ?"
+    (is
+     (diff/division-of-products? '(/ (* 5 2) (* 10 10))))
+
+    (is
+     (not (diff/division-of-products? '(/ (+ 5 2) (* 6 7)))))
+
+    (is
+     (not (diff/division-of-products? '(/ 60 70))))
+
+    (is
+     (not (diff/division-of-products? 50)))))
+
+
+
+
 (deftest derivatives
   (testing "Derivative of (+ 5 5)"
     (is
