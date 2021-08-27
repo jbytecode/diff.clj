@@ -91,6 +91,9 @@
 (defn atan [x] (Math/atan x))
 (defn acot [x] (/ 1.0 (Math/atan x)))
 
+
+;; %%%%%%%%%%% Helper functions %%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 ;; First test if x is number
 ;; and then test if it is zero
 (defn number-and-zero? [x]
@@ -120,6 +123,13 @@
    (= (first expr) '/)
    (product? (second expr))
    (product? (last expr))))
+
+
+
+
+;; %%%%%%%%%%% Derivation functions %%%%%%%%%%%%%%%%%%%
+
+
 
 ;; Derivative of sum of two terms
 (defn deriv-plus [expr]
