@@ -38,6 +38,13 @@
 
 
 
+(deftest division-simplification
+  (testing "Testing AB/BC = AC type of divisions"
+    (is
+     (=
+      (simplify '(/ (* (+ x 2) (+ x 5)) (* (+ x 5) (+ x 7))))
+      '(/ (+ x 2) (+ x 7))))))
+
 
 (deftest derivatives
   (testing "Derivative of (+ 5 5)"
