@@ -1,12 +1,15 @@
 (ns diffclj.erf-test
-  (:require [clojure.test :refer [deftest testing is]]
-            [diffclj.erf :refer [erf inv-erf]]
-            [diffclj.utility :refer [approx?]]))
+  (:require
+    [clojure.test :refer [deftest testing is]]
+    [diffclj.erf :refer [erf inv-erf]]
+    [diffclj.utility :refer [approx?]]))
+
 
 (deftest erf-test
   (testing "erf function"
     (is (approx? 0.8427 (erf 1.0) 0.0001))
     (is (approx? 0.5205 (erf 0.5) 0.0001))))
+
 
 (deftest inv-erf-test
   (testing "inverse erf function"
