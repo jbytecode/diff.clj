@@ -7,65 +7,65 @@
 ;; the call order may differs
 ;; than the order of definitions
 (declare
-  deriv-acot          ; Inverse cotangent
-  deriv-atan          ; Inverse tangent
-  deriv-acos          ; Inverse cosine
-  deriv-asin          ; Inverse sine
-  deriv-csch          ; hyperbolic cosecant
-  deriv-sech          ; hyperbolic secant
-  deriv-coth          ; hyperbolic cotangent
-  deriv-tanh          ; hyperbolic tangent
-  deriv-cosh          ; hyperbolic cosine
-  deriv-sinh          ; hyperbolic sine
-  deriv-cosec         ; cosecant
-  deriv-sec           ; secant
-  deriv-cot           ; cotangent
-  deriv-tan           ; tangent
-  deriv-cos           ; cosine
-  deriv-sin           ; sine
-  deriv-exp           ; exponential
-  deriv-plus          ; +
-  deriv-minus         ; -
-  deriv-product       ; *
-  deriv-divide        ; /
-  deriv-power         ; ^
-  deriv-log10         ; Logarithm with base 10
-  deriv-log2          ; Logarithm with base 2
-  deriv-log           ; Natural logarithm
-  deriv-sqrt          ; Square root
-  deriv-list
-  deriv)
+ deriv-acot          ; Inverse cotangent
+ deriv-atan          ; Inverse tangent
+ deriv-acos          ; Inverse cosine
+ deriv-asin          ; Inverse sine
+ deriv-csch          ; hyperbolic cosecant
+ deriv-sech          ; hyperbolic secant
+ deriv-coth          ; hyperbolic cotangent
+ deriv-tanh          ; hyperbolic tangent
+ deriv-cosh          ; hyperbolic cosine
+ deriv-sinh          ; hyperbolic sine
+ deriv-cosec         ; cosecant
+ deriv-sec           ; secant
+ deriv-cot           ; cotangent
+ deriv-tan           ; tangent
+ deriv-cos           ; cosine
+ deriv-sin           ; sine
+ deriv-exp           ; exponential
+ deriv-plus          ; +
+ deriv-minus         ; -
+ deriv-product       ; *
+ deriv-divide        ; /
+ deriv-power         ; ^
+ deriv-log10         ; Logarithm with base 10
+ deriv-log2          ; Logarithm with base 2
+ deriv-log           ; Natural logarithm
+ deriv-sqrt          ; Square root
+ deriv-list
+ deriv)
 
 
 (declare
-  simplify-acot
-  simplify-atan
-  simplify-acos
-  simplify-asin
-  simplify-csch
-  simplify-sech
-  simplify-coth
-  simplify-tanh
-  simplify-cosh
-  simplify-sinh
-  simplify-cosec
-  simplify-cot
-  simplify-tan
-  simplify-sec
-  simplify-cos
-  simplify-sin
-  simplify-log2
-  simplify-log10
-  simplify-log
-  simplify-power
-  simplify-exp
-  simplify-division-of-products
-  simplify-divide
-  simplify-product
-  simplify-plus
-  simplify-minus
-  simplify-list
-  simplify)
+ simplify-acot
+ simplify-atan
+ simplify-acos
+ simplify-asin
+ simplify-csch
+ simplify-sech
+ simplify-coth
+ simplify-tanh
+ simplify-cosh
+ simplify-sinh
+ simplify-cosec
+ simplify-cot
+ simplify-tan
+ simplify-sec
+ simplify-cos
+ simplify-sin
+ simplify-log2
+ simplify-log10
+ simplify-log
+ simplify-power
+ simplify-exp
+ simplify-division-of-products
+ simplify-divide
+ simplify-product
+ simplify-plus
+ simplify-minus
+ simplify-list
+ simplify)
 
 
 ;; Namespace aliases for Math fns
@@ -73,7 +73,7 @@
 (def sqrt  #(Math/sqrt %))
 (def log   #(Math/log %))
 (def log10 #(Math/log10 %))
-(def pow   #(Math/pow % %))
+(def pow   #(Math/pow %1 %2))
 (def exp   #(Math/exp %))
 (def sin   #(Math/sin %))
 (def cos   #(Math/cos %))
@@ -133,8 +133,8 @@
 (defn number-and-zero?
   [x]
   (and
-    (number? x)
-    (zero? x)))
+   (number? x)
+   (zero? x)))
 
 
 ;; First test if x is number
@@ -142,26 +142,26 @@
 (defn number-and-one?
   [x]
   (and
-    (number? x)
-    (= (double x) 1.0)))
+   (number? x)
+   (= (double x) 1.0)))
 
 
 (defn product?
   [expr]
   (and
-    (list? expr)
-    (= (count expr) 3)
-    (= (first expr) '*)))
+   (list? expr)
+   (= (count expr) 3)
+   (= (first expr) '*)))
 
 
 (defn division-of-products?
   [expr]
   (and
-    (list? expr)
-    (= (count expr) 3)
-    (= (first expr) '/)
-    (product? (second expr))
-    (product? (last expr))))
+   (list? expr)
+   (= (count expr) 3)
+   (= (first expr) '/)
+   (product? (second expr))
+   (product? (last expr))))
 
 
 ;; %%%%%%%%%%% Derivation functions %%%%%%%%%%%%%%%%%%%
@@ -172,55 +172,55 @@
 (defn deriv-plus
   [expr]
   (list
-    '+
-    (deriv (second expr))
-    (deriv (last expr))))
+   '+
+   (deriv (second expr))
+   (deriv (last expr))))
 
 
 ;; Derivative of subtraction of two terms
 (defn deriv-minus
   [expr]
   (list
-    '-
-    (deriv (second expr))
-    (deriv (last expr))))
+   '-
+   (deriv (second expr))
+   (deriv (last expr))))
 
 
 ;; Derivative of production of two terms
 (defn deriv-product
   [expr]
   (list
-    '+
-    (list
-      '*
-      (deriv (second expr))
-      (last expr))
-    (list
-      '*
-      (deriv (last expr))
-      (second expr))))
+   '+
+   (list
+    '*
+    (deriv (second expr))
+    (last expr))
+   (list
+    '*
+    (deriv (last expr))
+    (second expr))))
 
 
 ;; Derivative of division of two terms
 (defn deriv-divide
   [expr]
   (list
-    '/
+   '/
+   (list
+    '-
     (list
-      '-
-      (list
-        '*
-        (deriv (second expr))
-        (last expr))
-      (list
-        '*
-        (deriv (last expr))
-        (second expr)))
+     '*
+     (deriv (second expr))
+     (last expr))
+    (list
+     '*
+     (deriv (last expr))
+     (second expr)))
 
-    (list
-      '*
-      (last expr)
-      (last expr))))
+   (list
+    '*
+    (last expr)
+    (last expr))))
 
 
 ;; Derivative of x^a style expression where
@@ -228,13 +228,13 @@
 (defn deriv-power
   [expr]
   (list
-    '*
-    expr
-    (deriv
-      (list
-        '*
-        (last expr)
-        (list 'log (second expr))))))
+   '*
+   expr
+   (deriv
+    (list
+     '*
+     (last expr)
+     (list 'log (second expr))))))
 
 
 ;; Derivative of ln a style expression where
@@ -242,31 +242,31 @@
 (defn deriv-log
   [expr]
   (list
-    '/
-    (deriv (second expr))
-    (second expr)))
+   '/
+   (deriv (second expr))
+   (second expr)))
 
 
 (defn deriv-log10
   [expr]
   (list
-    '/
-    (deriv (second expr))
-    (list
-      '*
-      (second expr)
-      (log 10))))
+   '/
+   (deriv (second expr))
+   (list
+    '*
+    (second expr)
+    (log 10))))
 
 
 (defn deriv-log2
   [expr]
   (list
-    '/
-    (deriv (second expr))
-    (list
-      '*
-      (second expr)
-      (log 2))))
+   '/
+   (deriv (second expr))
+   (list
+    '*
+    (second expr)
+    (log 2))))
 
 
 ;; Derivate of sqrt(a) where a is either
@@ -274,12 +274,12 @@
 (defn deriv-sqrt
   [expr]
   (list
-    '*
-    (deriv (second expr))
-    (list
-      '/
-      1
-      (list '* 2 (list 'sqrt (second expr))))))
+   '*
+   (deriv (second expr))
+   (list
+    '/
+    1
+    (list '* 2 (list 'sqrt (second expr))))))
 
 
 ;; Derivative of exp(a) where a is either
@@ -287,11 +287,11 @@
 (defn deriv-exp
   [expr]
   (list
-    '*
-    (deriv (second expr))
-    (list
-      'exp
-      (second expr))))
+   '*
+   (deriv (second expr))
+   (list
+    'exp
+    (second expr))))
 
 
 ;; Derivative of sin(a) where a is either
@@ -299,11 +299,11 @@
 (defn deriv-sin
   [expr]
   (list
-    '*
-    (deriv (second expr))
-    (list
-      'cos
-      (second expr))))
+   '*
+   (deriv (second expr))
+   (list
+    'cos
+    (second expr))))
 
 
 ;; Derivative of cos(a) where a is either
@@ -311,14 +311,14 @@
 (defn deriv-cos
   [expr]
   (list
+   '*
+   -1
+   (list
     '*
-    -1
+    (deriv (second expr))
     (list
-      '*
-      (deriv (second expr))
-      (list
-        'sin
-        (second expr)))))
+     'sin
+     (second expr)))))
 
 
 ;; Derivative of tan(a) where a is either
@@ -328,16 +328,16 @@
 (defn deriv-tan
   [expr]
   (list
-    '/
-    (deriv (second expr))
+   '/
+   (deriv (second expr))
+   (list
+    '*
     (list
-      '*
-      (list
-        'cos
-        (second expr))
-      (list
-        'cos
-        (second expr)))))
+     'cos
+     (second expr))
+    (list
+     'cos
+     (second expr)))))
 
 
 ;; Derivative of cot(a) where a is either
@@ -347,205 +347,204 @@
 (defn deriv-cot
   [expr]
   (list
-    '/
+   '/
+   (list
+    '* -1 (deriv (second expr)))
+   (list
+    '*
     (list
-      '* -1 (deriv (second expr)))
+     'sin
+     (second expr))
     (list
-      '*
-      (list
-        'sin
-        (second expr))
-      (list
-        'sin
-        (second expr)))))
+     'sin
+     (second expr)))))
 
 
 ;; sec(x) = 1 / cos(x)
 (defn deriv-sec
   [expr]
   (deriv
+   (list
+    '/
+    1.0
     (list
-      '/
-      1.0
-      (list
-        'cos
-        (second expr)))))
+     'cos
+     (second expr)))))
 
 
 ;; sec(x) = 1 / sin(x)
 (defn deriv-cosec
   [expr]
   (deriv
+   (list
+    '/
+    1.0
     (list
-      '/
-      1.0
-      (list
-        'sin
-        (second expr)))))
+     'sin
+     (second expr)))))
 
 
 (defn deriv-sinh
   [expr]
   (list
-    '*
-    (list '/ 1 2)
+   '*
+   (list '/ 1 2)
+   (list
+    '-
+    (list '* (deriv (second expr)) (list 'exp (second expr)))
     (list
-      '-
-      (list '* (deriv (second expr)) (list 'exp (second expr)))
-      (list
-        '*
-        (deriv (list '* -1 (second expr)))
-        (list 'exp (list '* -1 (second expr)))))))
+     '*
+     (deriv (list '* -1 (second expr)))
+     (list 'exp (list '* -1 (second expr)))))))
 
 
 (defn deriv-cosh
   [expr]
   (list
-    '*
-    (list '/ 1 2)
+   '*
+   (list '/ 1 2)
+   (list
+    '+
+    (list '* (deriv (second expr)) (list 'exp (second expr)))
     (list
-      '+
-      (list '* (deriv (second expr)) (list 'exp (second expr)))
-      (list
-        '*
-        (deriv (list '* -1 (second expr)))
-        (list 'exp (list '* -1 (second expr)))))))
+     '*
+     (deriv (list '* -1 (second expr)))
+     (list 'exp (list '* -1 (second expr)))))))
 
 
 (defn deriv-tanh
   [expr]
   (deriv
+   (list
+    '/
     (list
-      '/
-      (list
-        'sinh
-        (second expr))
-      (list
-        'cosh
-        (second expr)))))
+     'sinh
+     (second expr))
+    (list
+     'cosh
+     (second expr)))))
 
 
 (defn deriv-coth
   [expr]
   (deriv
+   (list
+    '/
     (list
-      '/
-      (list
-        'cosh
-        (second expr))
-      (list
-        'sinh
-        (second expr)))))
+     'cosh
+     (second expr))
+    (list
+     'sinh
+     (second expr)))))
 
 
 (defn deriv-sech
   [expr]
   (deriv
+   (list
+    '/
+    1
     (list
-      '/
-      1
-      (list
-        'cosh
-        (second expr)))))
+     'cosh
+     (second expr)))))
 
 
 (defn deriv-csch
   [expr]
   (deriv
+   (list
+    '/
+    1
     (list
-      '/
-      1
-      (list
-        'sinh
-        (second expr)))))
+     'sinh
+     (second expr)))))
 
 
 (defn deriv-asin
   [expr]
   (list
-    '/
-    (deriv (second expr))
-    (list
-      'sqrt
-      (list '- 1
-            (list 'pow (second expr) 2)))))
+   '/
+   (deriv (second expr))
+   (list
+    'sqrt
+    (list '- 1
+          (list 'pow (second expr) 2)))))
 
 
 (defn deriv-acos
   [expr]
   (list
-    '/
-    (list
-      '* -1 (deriv (second expr)))
-    (list
-      'sqrt
-      (list '- 1
-            (list 'pow (second expr) 2)))))
+   '/
+   (list
+    '* -1 (deriv (second expr)))
+   (list
+    'sqrt
+    (list '- 1
+          (list 'pow (second expr) 2)))))
 
 
 (defn deriv-atan
   [expr]
   (list
-    '/
-    (deriv (second expr))
+   '/
+   (deriv (second expr))
+   (list
+    '+
+    1
     (list
-      '+
-      1
-      (list
-        'pow (second expr) 2))))
+     'pow (second expr) 2))))
 
 
 (defn deriv-acot
   [expr]
   (list
-    '/
+   '/
+   (list
+    '*
+    -1
+    (deriv (second expr)))
+   (list
+    '+
+    1
     (list
-      '*
-      -1
-      (deriv (second expr)))
-    (list
-      '+
-      1
-      (list
-        'pow (second expr) 2))))
+     'pow (second expr) 2))))
 
 
 ;; Derivation of (binaryop first-operand second operand) type
 ;; expression like (* 'x 2) or (/ 'x (* x 2))
 (defn deriv-list
   [expr]
-  (let
-    [op    (first expr)]
-    (cond
-      (= op '+)              (deriv-plus expr)
-      (= op '-)              (deriv-minus expr)
-      (= op '*)              (deriv-product expr)
-      (= op '/)              (deriv-divide expr)
-      (= op 'pow)            (deriv-power expr)
-      (= op 'log)            (deriv-log  expr)
-      (= op 'log10)          (deriv-log10 expr)
-      (= op 'log2)           (deriv-log2 expr)
-      (= op 'sqrt)           (deriv-sqrt expr)
-      (= op 'exp)            (deriv-exp  expr)
-      (= op 'sin)            (deriv-sin expr)
-      (= op 'cos)            (deriv-cos expr)
-      (= op 'tan)            (deriv-tan expr)
-      (= op 'cot)            (deriv-cot expr)
-      (= op 'sec)            (deriv-sec expr)
-      (= op 'cosec)          (deriv-cosec expr)
-      (= op 'sinh)           (deriv-sinh expr)
-      (= op 'cosh)           (deriv-cosh expr)
-      (= op 'tanh)           (deriv-tanh expr)
-      (= op 'coth)           (deriv-coth expr)
-      (= op 'sech)           (deriv-sech expr)
-      (= op 'csch)           (deriv-csch expr)
-      (= op 'asin)           (deriv-asin expr)
-      (= op 'acos)           (deriv-acos expr)
-      (= op 'atan)           (deriv-atan expr)
-      (= op 'acot)           (deriv-acot expr)
-      true                   (throw
-                               (Exception.
-                                 (str "[ERROR] Function not defined: " op))))))
+  (let [op (first expr)]
+    (condp = op
+      '+     (deriv-plus expr)
+      '-     (deriv-minus expr)
+      '*     (deriv-product expr)
+      '/     (deriv-divide expr)
+      'pow   (deriv-power expr)
+      'log   (deriv-log  expr)
+      'log10 (deriv-log10 expr)
+      'log2  (deriv-log2 expr)
+      'sqrt  (deriv-sqrt expr)
+      'exp   (deriv-exp  expr)
+      'sin   (deriv-sin expr)
+      'cos   (deriv-cos expr)
+      'tan   (deriv-tan expr)
+      'cot   (deriv-cot expr)
+      'sec   (deriv-sec expr)
+      'cosec (deriv-cosec expr)
+      'sinh  (deriv-sinh expr)
+      'cosh  (deriv-cosh expr)
+      'tanh  (deriv-tanh expr)
+      'coth  (deriv-coth expr)
+      'sech  (deriv-sech expr)
+      'csch  (deriv-csch expr)
+      'asin  (deriv-asin expr)
+      'acos  (deriv-acos expr)
+      'atan  (deriv-atan expr)
+      'acot  (deriv-acot expr)
+      (throw
+       (Exception.
+        (str "[ERROR] Deriv function not defined: " op))))))
 
 
 ;; Main dispatcher function for
@@ -566,8 +565,8 @@
 (defn simplify-plus
   [expr]
   (let
-    [par1     (simplify (second expr))
-     par2     (simplify (last expr))]
+      [par1     (simplify (second expr))
+       par2     (simplify (last expr))]
     (cond
       (number-and-zero? par1)               par2
       (number-and-zero? par2)               par1
@@ -579,8 +578,8 @@
 (defn simplify-minus
   [expr]
   (let
-    [par1     (simplify (second expr))
-     par2     (simplify (last expr))]
+      [par1     (simplify (second expr))
+       par2     (simplify (last expr))]
     (cond
       (number-and-zero? par2)              par1
       (= par1 par2)                        0
@@ -591,8 +590,8 @@
 (defn simplify-product
   [expr]
   (let
-    [par1     (simplify (second expr))
-     par2     (simplify (last expr))]
+      [par1     (simplify (second expr))
+       par2     (simplify (last expr))]
     (cond
       (number-and-zero? par1)               0
       (number-and-zero? par2)               0
@@ -606,12 +605,12 @@
 (defn simplify-division-of-products
   [expr]
   (let
-    [nom                                (simplify (second expr))
-     denom                              (simplify (last expr))
-     nom-part1                          (if (list? nom) (simplify (second nom)) nom)
-     nom-part2                          (if (list? nom) (simplify (last nom)) nom)
-     denom-part1                        (if (list? denom) (simplify (second denom)) denom)
-     denom-part2                        (if (list? denom) (simplify (last denom)) denom)]
+      [nom                                (simplify (second expr))
+       denom                              (simplify (last expr))
+       nom-part1                          (if (list? nom) (simplify (second nom)) nom)
+       nom-part2                          (if (list? nom) (simplify (last nom)) nom)
+       denom-part1                        (if (list? denom) (simplify (second denom)) denom)
+       denom-part2                        (if (list? denom) (simplify (last denom)) denom)]
     (cond
       (= nom-part1 denom-part1)         (simplify (list '/ nom-part2 denom-part2))  ; AB/AC = B/C
       (= nom-part1 denom-part2)         (simplify (list '/ nom-part2 denom-part1))  ; AB/CA = B/C
@@ -624,8 +623,8 @@
 (defn simplify-divide
   [expr]
   (let
-    [par1     (simplify (second expr))
-     par2     (simplify (last expr))]
+      [par1     (simplify (second expr))
+       par2     (simplify (last expr))]
     (cond
       (number-and-zero? par1)            0
 
@@ -645,7 +644,7 @@
 (defn simplify-exp
   [expr]
   (let
-    [par1     (simplify (second expr))]
+      [par1     (simplify (second expr))]
     (cond
       (number-and-zero? par1)       1
       true                          (list 'exp par1))))
@@ -654,7 +653,7 @@
 (defn simplify-log
   [expr]
   (let
-    [par1     (simplify (second expr))]
+      [par1     (simplify (second expr))]
     (cond
       (and (number? par1)
            (= par1 1))                0
@@ -664,7 +663,7 @@
 (defn simplify-log10
   [expr]
   (let
-    [par1     (simplify (second expr))]
+      [par1     (simplify (second expr))]
     (cond
       (and (number? par1)
            (= par1 1))                0
@@ -674,7 +673,7 @@
 (defn simplify-log2
   [expr]
   (let
-    [par1     (simplify (second expr))]
+      [par1     (simplify (second expr))]
     (cond
       (and (number? par1)
            (= par1 1))                0
@@ -684,7 +683,7 @@
 (defn simplify-sqrt
   [expr]
   (let
-    [par1     (simplify (second expr))]
+      [par1     (simplify (second expr))]
     (cond
       (number? par1)                 (sqrt par1)
       true                           (list 'sqrt par1))))
@@ -693,8 +692,8 @@
 (defn simplify-power
   [expr]
   (let
-    [par1     (simplify (second expr))
-     par2      (simplify (last expr))]
+      [par1     (simplify (second expr))
+       par2      (simplify (last expr))]
     (cond
       (number-and-zero? par2)       1
       (number-and-zero? par1)       0
@@ -704,7 +703,7 @@
 (defn simplify-sin
   [expr]
   (let
-    [par1     (simplify (second expr))]
+      [par1     (simplify (second expr))]
     (cond
       (number? par1)                 (sin par1)
       true                           (list 'sin par1))))
@@ -713,7 +712,7 @@
 (defn simplify-cos
   [expr]
   (let
-    [par1     (simplify (second expr))]
+      [par1     (simplify (second expr))]
     (cond
       (number? par1)                 (cos par1)
       true                           (list 'cos par1))))
@@ -722,7 +721,7 @@
 (defn simplify-tan
   [expr]
   (let
-    [par1     (simplify (second expr))]
+      [par1     (simplify (second expr))]
     (cond
       (number? par1)                 (tan par1)
       true                           (list 'tan par1))))
@@ -731,7 +730,7 @@
 (defn simplify-cot
   [expr]
   (let
-    [par1     (simplify (second expr))]
+      [par1     (simplify (second expr))]
     (cond
       (number? par1)                 (cot par1)
       true                           (list 'cot par1))))
@@ -740,7 +739,7 @@
 (defn simplify-sec
   [expr]
   (let
-    [par1     (simplify (second expr))]
+      [par1     (simplify (second expr))]
     (cond
       (number? par1)                 (sec par1)
       true                           (list 'sec par1))))
@@ -749,7 +748,7 @@
 (defn simplify-cosec
   [expr]
   (let
-    [par1     (simplify (second expr))]
+      [par1     (simplify (second expr))]
     (cond
       (number? par1)                 (cosec par1)
       true                           (list 'cosec par1))))
@@ -758,7 +757,7 @@
 (defn simplify-sinh
   [expr]
   (let
-    [par1     (simplify (second expr))]
+      [par1     (simplify (second expr))]
     (cond
       (number? par1)                 (sinh par1)
       true                           (list 'sinh par1))))
@@ -767,7 +766,7 @@
 (defn simplify-cosh
   [expr]
   (let
-    [par1     (simplify (second expr))]
+      [par1     (simplify (second expr))]
     (cond
       (number? par1)                 (cosh par1)
       true                           (list 'cosh par1))))
@@ -776,7 +775,7 @@
 (defn simplify-tanh
   [expr]
   (let
-    [par1     (simplify (second expr))]
+      [par1     (simplify (second expr))]
     (cond
       (number? par1)                 (tanh par1)
       true                           (list 'tanh par1))))
@@ -785,7 +784,7 @@
 (defn simplify-coth
   [expr]
   (let
-    [par1     (simplify (second expr))]
+      [par1     (simplify (second expr))]
     (cond
       (number? par1)                 (coth par1)
       true                           (list 'coth par1))))
@@ -794,7 +793,7 @@
 (defn simplify-sech
   [expr]
   (let
-    [par1     (simplify (second expr))]
+      [par1     (simplify (second expr))]
     (cond
       (number? par1)                 (sech par1)
       true                           (list 'sech par1))))
@@ -803,7 +802,7 @@
 (defn simplify-csch
   [expr]
   (let
-    [par1     (simplify (second expr))]
+      [par1     (simplify (second expr))]
     (cond
       (number? par1)                 (csch par1)
       true                           (list 'csch par1))))
@@ -812,7 +811,7 @@
 (defn simplify-asin
   [expr]
   (let
-    [par1     (simplify (second expr))]
+      [par1     (simplify (second expr))]
     (cond
       (number? par1)                 (asin par1)
       true                           (list 'asin par1))))
@@ -821,7 +820,7 @@
 (defn simplify-acos
   [expr]
   (let
-    [par1     (simplify (second expr))]
+      [par1     (simplify (second expr))]
     (cond
       (number? par1)                 (acos par1)
       true                           (list 'acos par1))))
@@ -830,7 +829,7 @@
 (defn simplify-atan
   [expr]
   (let
-    [par1     (simplify (second expr))]
+      [par1     (simplify (second expr))]
     (cond
       (number? par1)                 (atan par1)
       true                           (list 'atan par1))))
@@ -839,7 +838,7 @@
 (defn simplify-acot
   [expr]
   (let
-    [par1     (simplify (second expr))]
+      [par1     (simplify (second expr))]
     (cond
       (number? par1)                 (acot par1)
       true                           (list 'acot par1))))
@@ -847,38 +846,37 @@
 
 (defn simplify-list
   [expr]
-  (let
-    [op    (first expr)]
-    (cond
-      (= op '+)            (simplify-plus expr)
-      (= op '-)            (simplify-minus expr)
-      (= op '*)            (simplify-product expr)
-      (= op '/)            (simplify-divide expr)
-      (= op 'exp)          (simplify-exp expr)
-      (= op 'pow)          (simplify-power expr)
-      (= op 'sqrt)         (simplify-sqrt expr)
-      (= op 'log)          (simplify-log expr)
-      (= op 'log10)        (simplify-log10 expr)
-      (= op 'log2)         (simplify-log2 expr)
-      (= op 'sin)          (simplify-sin expr)
-      (= op 'cos)          (simplify-cos expr)
-      (= op 'tan)          (simplify-tan expr)
-      (= op 'cot)          (simplify-cot expr)
-      (= op 'sec)          (simplify-sec expr)
-      (= op 'cosec)        (simplify-cosec expr)
-      (= op 'sinh)         (simplify-sinh expr)
-      (= op 'cosh)         (simplify-cosh expr)
-      (= op 'tanh)         (simplify-tanh expr)
-      (= op 'coth)         (simplify-coth expr)
-      (= op 'sech)         (simplify-sech expr)
-      (= op 'csch)         (simplify-csch expr)
-      (= op 'asin)         (simplify-asin expr)
-      (= op 'acos)         (simplify-acos expr)
-      (= op 'atan)         (simplify-atan expr)
-      (= op 'acot)         (simplify-acot expr)
-      true                 (throw
-                             (Exception.
-                               (str "[ERROR] Function not defined: " op))))))
+  (let [op (first expr)]
+    (condp = op
+      '+     (simplify-plus expr)
+      '-     (simplify-minus expr)
+      '*     (simplify-product expr)
+      '/     (simplify-divide expr)
+      'exp   (simplify-exp expr)
+      'pow   (simplify-power expr)
+      'sqrt  (simplify-sqrt expr)
+      'log   (simplify-log expr)
+      'log10 (simplify-log10 expr)
+      'log2  (simplify-log2 expr)
+      'sin   (simplify-sin expr)
+      'cos   (simplify-cos expr)
+      'tan   (simplify-tan expr)
+      'cot   (simplify-cot expr)
+      'sec   (simplify-sec expr)
+      'cosec (simplify-cosec expr)
+      'sinh  (simplify-sinh expr)
+      'cosh  (simplify-cosh expr)
+      'tanh  (simplify-tanh expr)
+      'coth  (simplify-coth expr)
+      'sech  (simplify-sech expr)
+      'csch  (simplify-csch expr)
+      'asin  (simplify-asin expr)
+      'acos  (simplify-acos expr)
+      'atan  (simplify-atan expr)
+      'acot  (simplify-acot expr)
+      (throw
+       (Exception.
+        (str "[ERROR] Simplify function not defined: " op))))))
 
 
 ;; Main dispatcher function for
