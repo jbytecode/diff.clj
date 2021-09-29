@@ -2,8 +2,8 @@
   (:gen-class))
 
 
-;; declare derivative functions 
-;; on top of the file, because 
+;; declare derivative functions
+;; on top of the file, because
 ;; the call order may differs
 ;; than the order of definitions
 (declare
@@ -68,116 +68,62 @@
   simplify)
 
 
-;; Wrapper functions for 
+;; Namespace aliases for Math fns
 ;; sqrt, log, pow, etc
-(defn sqrt
-  [x]
-  (Math/sqrt x))
-
-
-(defn log
-  [x]
-  (Math/log x))
-
-
-(defn log10
-  [x]
-  (Math/log10 x))
+(def sqrt  #(Math/sqrt %))
+(def log   #(Math/log %))
+(def log10 #(Math/log10 %))
+(def pow   #(Math/pow % %))
+(def exp   #(Math/exp %))
+(def sin   #(Math/sin %))
+(def cos   #(Math/cos %))
+(def tan   #(Math/tan %))
+(def sinh  #(Math/sinh %))
+(def cosh  #(Math/cosh %))
+(def tanh  #(Math/tanh %))
+(def asin  #(Math/asin %))
+(def acos  #(Math/acos %))
+(def atan  #(Math/atan %))
 
 
 (defn log2
   [x]
-  (/ (Math/log x) (Math/log 2)))
-
-
-(defn pow
-  [x y]
-  (Math/pow x y))
-
-
-(defn exp
-  [x]
-  (Math/exp x))
-
-
-(defn sin
-  [x]
-  (Math/sin x))
-
-
-(defn cos
-  [x]
-  (Math/cos x))
-
-
-(defn tan
-  [x]
-  (Math/tan x))
+  (/ (log x) (log 2)))
 
 
 (defn cot
   [x]
-  (/ 1.0 (Math/tan x)))
+  (/ 1.0 (tan x)))
 
 
 (defn sec
   [x]
-  (/ 1.0 (Math/cos x)))
+  (/ 1.0 (cos x)))
 
 
 (defn cosec
   [x]
-  (/ 1.0 (Math/sin x)))
-
-
-(defn sinh
-  [x]
-  (Math/sinh x))
-
-
-(defn cosh
-  [x]
-  (Math/cosh x))
-
-
-(defn tanh
-  [x]
-  (Math/tanh x))
+  (/ 1.0 (sin x)))
 
 
 (defn coth
   [x]
-  (/ 1.0 (Math/tanh x)))
+  (/ 1.0 (tanh x)))
 
 
 (defn sech
   [x]
-  (/ 1.0 (Math/cosh x)))
+  (/ 1.0 (cosh x)))
 
 
 (defn csch
   [x]
-  (/ 1.0 (Math/sinh x)))
-
-
-(defn asin
-  [x]
-  (Math/asin x))
-
-
-(defn acos
-  [x]
-  (Math/acos x))
-
-
-(defn atan
-  [x]
-  (Math/atan x))
+  (/ 1.0 (sinh x)))
 
 
 (defn acot
   [x]
-  (/ 1.0 (Math/atan x)))
+  (/ 1.0 (atan x)))
 
 
 ;; %%%%%%%%%%% Helper functions %%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -240,7 +186,7 @@
     (deriv (last expr))))
 
 
-;; Derivative of production of two terms 
+;; Derivative of production of two terms
 (defn deriv-product
   [expr]
   (list
@@ -292,7 +238,7 @@
 
 
 ;; Derivative of ln a style expression where
-;; a is either a constant or a function 
+;; a is either a constant or a function
 (defn deriv-log
   [expr]
   (list
@@ -564,7 +510,7 @@
         'pow (second expr) 2))))
 
 
-;; Derivation of (binaryop first-operand second operand) type 
+;; Derivation of (binaryop first-operand second operand) type
 ;; expression like (* 'x 2) or (/ 'x (* x 2))
 (defn deriv-list
   [expr]
@@ -602,7 +548,7 @@
                                  (str "[ERROR] Function not defined: " op))))))
 
 
-;; Main dispatcher function for 
+;; Main dispatcher function for
 ;; derivatives of a single variable
 ;; function
 (defn deriv
@@ -948,4 +894,3 @@
 (defn -main
   [& args]
   (println "Todo: Add command line arguments parser"))
-
