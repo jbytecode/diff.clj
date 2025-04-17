@@ -322,7 +322,7 @@
 
 
 ;; Derivative of tan(a) where a is either
-;; a costant of a function.
+;; a constant of a function.
 ;; tanf(x) = sinf(x) / cosf(x)
 ;; d(tanf(x))/dx = f'(x) / [cosf(x) * cosf(x)]
 (defn deriv-tan
@@ -341,7 +341,7 @@
 
 
 ;; Derivative of cot(a) where a is either
-;; a costant of a function.
+;; a constant of a function.
 ;; cotf(x) = cosf(x) / sinf(x)
 ;; d(cotf(x))/dx = -f'(x) / [sinf(x) * sinf(x)]
 (defn deriv-cot
